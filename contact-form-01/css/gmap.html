@@ -1,0 +1,126 @@
+
+<?php
+function getDistance($addressFrom, $addressTo, $unit){
+    //Change address format
+    $formattedAddrFrom = str_replace(' ','+',$addressFrom);
+    $formattedAddrTo = str_replace(' ','+',$addressTo);
+
+   //Send request and receive json data
+$geocodeFrom = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$formattedAddrFrom.'&sensor=false&key=AIzaSyBOMQKyG37IA6VhextrNpB0YxQnsR6Phys');
+$outputFrom = json_decode($geocodeFrom);
+$geocodeTo = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$formattedAddrTo.'&sensor=false&key=AIzaSyBOMQKyG37IA6VhextrNpB0YxQnsR6Phys');
+$outputTo = json_decode($geocodeTo);
+
+    //print_r($outputFrom);
+    //Get latitude and longitude from geo data
+    $latitudeFrom = $outputFrom->results[0]->geometry->location->lat;
+$longitudeFrom = $outputFrom->results[0]->geometry->location->lng;
+$latitudeTo = $outputTo->results[0]->geometry->location->lat;
+$longitudeTo = $outputTo->results[0]->geometry->location->lng;
+//Calculate distance from latitude and longitude
+$theta = $longitudeFrom - $longitudeTo;
+$dist = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
+$dist = acos($dist);
+$dist = rad2deg($dist);
+$miles = $dist * 60 * 1.151;
+$unit = strtoupper($unit);
+if ($unit == "K") {
+return ($miles * 1.609344).' km';
+} else if ($unit == "N") {
+return ($miles * 0.8684).' nm';
+} else {
+return $miles.' mi';
+}
+}
+
+if(isset($_REQUEST['cal']))
+{
+
+$addressFrom = $_POST['addressfrom'];
+$addressTo =$_POST['addressto'];
+
+$distance = getDistance($addressFrom, $addressTo, "K");
+
+}
+?>
+<html>
+<head>
+    <title>Distance Calculation </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            border: 0px green dashed;
+        }
+        p {
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        input {
+            padding: 10px;
+            width: 500px;
+            font-size: 16px;
+            border: 1px #003366 solid;
+        }
+        textarea {
+            width: 500px;
+            height: 150px;
+            resize: none;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px #003366 solid;
+        }
+    </style>
+
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApFDV2MBiF7pB7NbAjFk-BpAHtB0qojKI&libraries=places"></script>
+    <script>
+        var autocomplete;
+        function initialize() {
+            autocomplete = new google.maps.places.Autocomplete(
+                /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
+                { types: ['geocode'] });
+
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            });
+
+            autocomplete = new google.maps.places.Autocomplete(
+                /** @type {HTMLInputElement} */(document.getElementById('autocomplete1')),
+                { types: ['geocode'] });
+
+            google.maps.event.addListener(autocomplete1, 'place_changed', function() {
+            });
+        }
+    </script>
+</head>
+<body onload="initialize()">
+
+<div class="container" id="locationField">
+    <center>
+        <h1>Distance: <?php
+if(isset($distance))
+{
+ echo $distance;
+}
+ ?></h1>
+    </center>
+    <form action="" method="post">
+        <p>
+            <input type="text" required placeholder="From" name="addressfrom" id="autocomplete" onFocus="geolocate()" />
+        </p>
+        <p>
+            <input type="text" required placeholder="To"  name="addressto" id="autocomplete1" onFocus="geolocate()" />
+        </p>
+        <p>
+            <input type="submit" name="cal" value="Calculate">
+        </p>
+    </form>
+</div>
+</body>
+</html>

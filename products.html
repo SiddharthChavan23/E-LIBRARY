@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>E-Library</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="google-signin-client_id" content="652834684099-s55nhriqjd0ratehpdib4seunl3rqi66.apps.googleusercontent.com">
+
+	<link rel="stylesheet" href="assets/css/signuporlogin.css" />
+	<!-- <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript> -->
+</head>
+<h2><a href="index.html" class="h2e"> E-Library </a> | Sign in/up Form </h2>
+
+
+
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form action="registration.php" method="POST">
+
+			<h1>Create Account</h1>
+
+			<input type="text" placeholder="Enter username"  name="username" id="useID" required>
+			<input type="text" placeholder="Name"  name="Name" required>
+			<input type="email" placeholder="Email" name="E_mail" required>
+			<input type="password" placeholder="Password" name="password" required>
+			<input type="submit" value="Sign up" name="submit" style="background: linear-gradient(#FF4B2B,#FF416C);color: white"></input>
+
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="validation.php" method="POST">
+
+			<h1>Sign in</h1>
+			<span>or use your account</span>
+			<input type="email" placeholder="Email" name="E_mail"required>
+			<input type="password" placeholder="Password" name="password" required>
+			<a href="#">Forgot your password?</a>
+			<input type="submit" value="Sign in" name="submit1" style="background: linear-gradient(#FF4B2B,#FF416C);color: white"></input>
+			<p>Or</p>
+			<div id="my-signin2"></div>
+			<script>
+				// function onSuccess(googleUser) {
+				// 	window.location.replace("book.html");
+				// }
+				// function onFailure(error) {
+				// 	console.log(error);
+				// }
+				// function renderButton() {
+				// 	gapi.signin2.render('my-signin2', {
+				// 		'scope': 'profile email',
+				// 		'width': 240,
+				// 		'height': 50,
+				// 		'longtitle': true,
+				// 		'theme': 'dark',
+				// 		'onsuccess': onSuccess,
+				// 		'onfailure': onFailure
+				// 	});
+				// }
+			</script>
+
+			<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+		</form>
+	</div>
+
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer>
+	<p>
+
+		Copyright © 2021 E-Library
+
+
+	</p>
+</footer>
+
+
+<!-- Scripts -->
+<script src="assets/js/signin.js"></script>
+
+</body>
+
+</html>
